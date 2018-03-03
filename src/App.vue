@@ -1,24 +1,31 @@
-<template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+<template lang='pug'>
+  #app
+    Row
+      Col(:span="12", :offset="6")
+        Card
+          .card-header(slot="header") Weather Powered Email
+          EmailSubscription
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import EmailSubscription from './components/controllers/EmailSubscription.vue'
+
+import { Header, Card, Row, Col } from "element-ui";
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    Card,
+    Col,
+    EmailSubscription,
+    Header,
+    Row
   }
 }
 </script>
 
-<style>
+<style lang='scss'>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
