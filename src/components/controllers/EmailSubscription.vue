@@ -5,13 +5,13 @@
       el-col(:span="16", :offset="4")
         el-form(ref="formData", :model="formData", :rules="rules")
           el-form-item(label="Email Address", prop="emailAddress")
-            el-input(v-model="formData.emailAddress", type='email', name="email-input" required="true")
+            el-input(v-model="formData.email", type='email', name="email-input" required="true")
           el-form-item(label="City and State", prop="location")
             el-select.location-select(v-model="formData.location", filterable, placeholder="Where do you live?", name="location-select", required="true")
               el-option(v-for="city in cities",
                         :key="cityName(city)",
                         :label="cityName(city)",
-                        :value="cityName(city)")
+                        :value="{city: city.city, state: city.state}")
           el-form-item
             el-button(@click="onSubmit", :disabled="disableFormSubmit()" @keyup.enter.native="onSubmit") Subscribe
 </template>
@@ -28,11 +28,11 @@ export default {
       processing: false,
       cities: cities,
       formData: {
-        emailAddress: null,
+        email: null,
         location: null
       },
       rules: {
-        emailAddress: [
+        email: [
           { required: true, validator: validateEmail, trigger: 'blur' }
         ],
         location: [
@@ -46,12 +46,19 @@ export default {
       return `${cityData.city}, ${cityData.state}`
     },
     disableFormSubmit () {
-      return !this.formData.emailAddress || !this.formData.location
+      return !this.formData.email || !this.formData.location
+    },
+    params (formData) {
+      return {
+        email: formData.email,
+        city: formData.location.city,
+        state: formData.location.state
+      }
     },
     onSubmit () {
       this.$refs.formData.validate((valid) => {
         if (valid) {
-          this.processing = store.create('subscriber', this.formData)
+          this.processing = store.create('subscriber', this.params(this.formData))
             .then(this.onSuccess)
             .catch(this.onError)
             .then(() => {
