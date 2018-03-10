@@ -1,8 +1,8 @@
 <template lang='pug'>
   #app
-    Row
-      Col(:span="12", :offset="6")
-        Card
+    el-row
+      el-col(:span="12", :offset="6")
+        el-card(style="background: rgba(255, 255, 255, 0.95);")
           .card-header(slot="header") Weather Powered Email
           EmailSubscription
 </template>
@@ -10,16 +10,11 @@
 <script>
 import EmailSubscription from './components/controllers/EmailSubscription.vue'
 
-import { Header, Card, Row, Col } from "element-ui";
 
 export default {
   name: 'app',
   components: {
-    Card,
-    Col,
-    EmailSubscription,
-    Header,
-    Row
+    EmailSubscription
   }
 }
 </script>
