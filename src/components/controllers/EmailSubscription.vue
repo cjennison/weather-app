@@ -7,11 +7,11 @@
           el-form-item(label="Email Address", prop="emailAddress")
             el-input(v-model="formData.email", type='email', name="email-input" required="true")
           el-form-item(label="City and State", prop="location")
-            el-select.location-select(v-model="formData.location", filterable, placeholder="Where do you live?", name="location-select", required="true")
-              el-option(v-for="city in cities",
-                        :key="cityName(city)",
+            el-select.location-select(v-model="formData.locationIndex", filterable, placeholder="Where do you live?", name="location-select", required="true")
+              el-option(v-for="(city, index) in cities",
+                        :key="index",
                         :label="cityName(city)",
-                        :value="{city: city.city, state: city.state}")
+                        :value="index")
           el-form-item
             el-button(@click="onSubmit", :disabled="disableFormSubmit()" @keyup.enter.native="onSubmit") Subscribe
 </template>
@@ -29,13 +29,13 @@ export default {
       cities: cities,
       formData: {
         email: null,
-        location: null
+        locationIndex: null
       },
       rules: {
         email: [
           { required: true, validator: validateEmail, trigger: 'blur' }
         ],
-        location: [
+        locationIndex: [
           { required: true, message: 'Please select a city and state', trigger: 'change' }
         ]
       }
@@ -46,13 +46,13 @@ export default {
       return `${cityData.city}, ${cityData.state}`
     },
     disableFormSubmit () {
-      return !this.formData.email || !this.formData.location
+      return !this.formData.email || !this.formData.locationIndex
     },
     params (formData) {
       return {
         email: formData.email,
-        city: formData.location.city,
-        state: formData.location.state
+        city: cities[formData.locationIndex].city,
+        state: cities[formData.locationIndex].state
       }
     },
     onSubmit () {
